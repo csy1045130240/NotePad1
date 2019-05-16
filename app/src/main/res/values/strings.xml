@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,12 +16,12 @@
 <resources>
     <string name="app_name">NotePad</string>
     <string name="live_folder_name">Notes</string>
-
+    <string name="menu_color">color</string>
     <string name="title_edit_title">Note title:</string>
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
     <string name="title_notes_list">Notes</string>
-
+    <string name="menu_output">导出</string>
     <string name="menu_add">New note</string>
     <string name="menu_save">Save</string>
     <string name="menu_delete">Delete</string>
@@ -30,7 +29,8 @@
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy</string>
     <string name="menu_paste">Paste</string>
-
+    <string name="output_name">output</string>
+    <string name="output_ok">output</string>
     <string name="button_ok">OK</string>
     <string name="text_title">Title:</string>
 

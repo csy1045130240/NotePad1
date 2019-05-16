@@ -1,7 +1,31 @@
 [
     {
+        "merged": "E:\\QQFilereceive\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\live_folder_notes.png",
+        "source": "E:\\QQFilereceive\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\live_folder_notes.png"
+    },
+    {
+        "merged": "F:\\Android work\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\live_folder_notes.png",
+        "source": "F:\\Android work\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\live_folder_notes.png"
+    },
+    {
         "merged": "E:\\gitrepos\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\live_folder_notes.png",
         "source": "E:\\gitrepos\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\live_folder_notes.png"
+    },
+    {
+        "merged": "F:\\Android work\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\app_notes.png",
+        "source": "F:\\Android work\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\app_notes.png"
+    },
+    {
+        "merged": "F:\\note\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\live_folder_notes.png",
+        "source": "F:\\note\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\live_folder_notes.png"
+    },
+    {
+        "merged": "E:\\QQFilereceive\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\app_notes.png",
+        "source": "E:\\QQFilereceive\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\app_notes.png"
+    },
+    {
+        "merged": "F:\\note\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\app_notes.png",
+        "source": "F:\\note\\NotePad\\app\\src\\main\\res\\drawable-ldpi\\app_notes.png"
     },
     {
         "merged": "E:\\gitrepos\\NotePad\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\app_notes.png",

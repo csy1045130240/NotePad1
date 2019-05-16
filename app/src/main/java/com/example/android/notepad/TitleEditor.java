@@ -43,7 +43,8 @@ public class TitleEditor extends Activity {
     // Creates a projection that returns the note ID and the note contents.
     private static final String[] PROJECTION = new String[] {
             NotePad.Notes._ID, // 0
-            NotePad.Notes.COLUMN_NAME_TITLE, // 1
+            NotePad.Notes.COLUMN_NAME_TITLE,// 1
+            NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE
     };
 
     // The position of the title column in a Cursor returned by the provider.

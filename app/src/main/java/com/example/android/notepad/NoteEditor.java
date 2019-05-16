@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -37,6 +38,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This Activity handles "editing" a note, where editing is responding to
@@ -57,11 +62,12 @@ public class NoteEditor extends Activity {
      * Creates a projection that returns the note ID and the note contents.
      */
     private static final String[] PROJECTION =
-        new String[] {
-            NotePad.Notes._ID,
-            NotePad.Notes.COLUMN_NAME_TITLE,
-            NotePad.Notes.COLUMN_NAME_NOTE
-    };
+            new String[] {
+                    NotePad.Notes._ID,
+                    NotePad.Notes.COLUMN_NAME_TITLE,
+                    NotePad.Notes.COLUMN_NAME_NOTE,
+                    NotePad.Notes.COLUMN_NAME_BACK_COLOR
+            };
 
     // A label for the saved state of the activity
     private static final String ORIGINAL_CONTENT = "origContent";
@@ -77,6 +83,7 @@ public class NoteEditor extends Activity {
     private Cursor mCursor;
     private EditText mText;
     private String mOriginalContent;
+
 
     /**
      * Defines a custom EditText View that draws lines between each line of text that is displayed.
@@ -149,6 +156,7 @@ public class NoteEditor extends Activity {
          *  Sets up for the edit, based on the action specified for the incoming Intent.
          */
 
+
         // Gets the action that triggered the intent filter for this Activity
         final String action = intent.getAction();
 
@@ -183,11 +191,12 @@ public class NoteEditor extends Activity {
                 return;
             }
 
+
             // Since the new entry was created, this sets the result to be returned
             // set the result to be returned.
             setResult(RESULT_OK, (new Intent()).setAction(mUri.toString()));
 
-        // If the action was other than EDIT or INSERT:
+            // If the action was other than EDIT or INSERT:
         } else {
 
             // Logs an error that the action was not understood, finishes the Activity, and
@@ -206,11 +215,11 @@ public class NoteEditor extends Activity {
          * android.content.AsyncQueryHandler or android.os.AsyncTask.
          */
         mCursor = managedQuery(
-            mUri,         // The URI that gets multiple notes from the provider.
-            PROJECTION,   // A projection that returns the note ID and note content for each note.
-            null,         // No "where" clause selection criteria.
-            null,         // No "where" clause selection values.
-            null          // Use the default sort order (modification date, descending)
+                mUri,         // The URI that gets multiple notes from the provider.
+                PROJECTION,   // A projection that returns the note ID and note content for each note.
+                null,         // No "where" clause selection criteria.
+                null,         // No "where" clause selection values.
+                null          // Use the default sort order (modification date, descending)
         );
 
         // For a paste, initializes the data from clipboard.
@@ -225,8 +234,10 @@ public class NoteEditor extends Activity {
         // Sets the layout for this Activity. See res/layout/note_editor.xml
         setContentView(R.layout.note_editor);
 
+        mCursor.moveToFirst();
         // Gets a handle to the EditText in the the layout.
         mText = (EditText) findViewById(R.id.note);
+
 
         /*
          * If this Activity had stopped previously, its state was written the ORIGINAL_CONTENT
@@ -248,7 +259,6 @@ public class NoteEditor extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
         /*
          * mCursor is initialized, since onCreate() always precedes onResume for any running
          * process. This tests that it's not null, since it should always contain data.
@@ -272,7 +282,7 @@ public class NoteEditor extends Activity {
                 Resources res = getResources();
                 String text = String.format(res.getString(R.string.title_edit), title);
                 setTitle(text);
-            // Sets the title to "create" for inserts
+                // Sets the title to "create" for inserts
             } else if (mState == STATE_INSERT) {
                 setTitle(getText(R.string.title_create));
             }
@@ -294,11 +304,40 @@ public class NoteEditor extends Activity {
             if (mOriginalContent == null) {
                 mOriginalContent = note;
             }
+            //读取颜色数据做准备
+            int x = mCursor.getInt(mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_BACK_COLOR));
+            /**
+             * 白 255 255 255
+             * 黄 247 216 133
+             * 蓝 165 202 237
+             * 绿 161 214 174
+             * 红 244 149 133
+             */
+            switch (x){
+                case NotePad.Notes.DEFAULT_COLOR:
+                    mText.setBackgroundColor(Color.rgb(255, 255, 255));
+                    break;
+                case NotePad.Notes.YELLOW_COLOR:
+                    mText.setBackgroundColor(Color.rgb(247, 216, 133));
+                    break;
+                case NotePad.Notes.BLUE_COLOR:
+                    mText.setBackgroundColor(Color.rgb(165, 202, 237));
+                    break;
+                case NotePad.Notes.GREEN_COLOR:
+                    mText.setBackgroundColor(Color.rgb(161, 214, 174));
+                    break;
+                case NotePad.Notes.RED_COLOR:
+                    mText.setBackgroundColor(Color.rgb(244, 149, 133));
+                    break;
+                default:
+                    mText.setBackgroundColor(Color.rgb(255, 255, 255));
+                    break;
+            }
 
-        /*
-         * Something is wrong. The Cursor should always contain data. Report an error in the
-         * note.
-         */
+            /*
+             * Something is wrong. The Cursor should always contain data. Report an error in the
+             * note.
+             */
         } else {
             setTitle(getText(R.string.error_title));
             mText.setText(getText(R.string.error_message));
@@ -367,10 +406,11 @@ public class NoteEditor extends Activity {
             } else if (mState == STATE_EDIT) {
                 // Creates a map to contain the new values for the columns
                 updateNote(text, null);
+
             } else if (mState == STATE_INSERT) {
                 updateNote(text, text);
                 mState = STATE_EDIT;
-          }
+            }
         }
     }
 
@@ -390,7 +430,7 @@ public class NoteEditor extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.editor_options_menu, menu);
 
-        // Only add extra menu items for a saved note 
+        // Only add extra menu items for a saved note
         if (mState == STATE_EDIT) {
             // Append to the
             // menu items for any other activities that can do stuff with it
@@ -429,22 +469,65 @@ public class NoteEditor extends Activity {
      * @return True to indicate that the item was processed, and no further work is necessary. False
      * to proceed to further processing as indicated in the MenuItem object.
      */
+    //跳转导出笔记的activity，将uri信息传到新的activity
+    private final void outputNote() {
+        Intent intent = new Intent(null,mUri);
+        intent.setClass(NoteEditor.this,OutputText.class);
+        NoteEditor.this.startActivity(intent);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle all of the possible menu actions.
         switch (item.getItemId()) {
-        case R.id.menu_save:
-            String text = mText.getText().toString();
-            updateNote(text, null);
-            finish();
-            break;
-        case R.id.menu_delete:
-            deleteNote();
-            finish();
-            break;
-        case R.id.menu_revert:
-            cancelNote();
-            break;
+            //导出笔记选项
+            case R.id.menu_output:
+                outputNote();
+                break;
+            case R.id.menu_save:
+                String text = mText.getText().toString();
+                updateNote(text, null);
+                finish();
+                break;
+            case R.id.menu_delete:
+                deleteNote();
+                finish();
+                break;
+            case R.id.menu_revert:
+                cancelNote();
+                break;
+            case R.id.TextSize_20:
+                mText.setTextSize(20);
+                Toast toast1 =Toast.makeText(NoteEditor.this,"修改成功",Toast.LENGTH_SHORT);
+                toast1.show();
+                //  finish();
+                break;
+            case R.id.TextSize_36:
+                mText.setTextSize(36);
+                Toast toast2 =Toast.makeText(NoteEditor.this,"修改成功",Toast.LENGTH_SHORT);
+                toast2.show();
+                //   finish();
+                break;
+            case R.id.TextSize_50:
+                mText.setTextSize(50);
+                Toast toast3 =Toast.makeText(NoteEditor.this,"修改成功",Toast.LENGTH_SHORT);
+                toast3.show();
+                //    finish();
+                break;
+            case R.id.red:
+                mText.setTextColor(Color.parseColor("#FF0000"));
+                Toast toast5 =Toast.makeText(NoteEditor.this,"修改成功",Toast.LENGTH_SHORT);
+                toast5.show();
+                //  finish();
+                break;
+            case R.id.black:
+                mText.setTextColor(Color.parseColor("#000000"));
+                Toast toast6 =Toast.makeText(NoteEditor.this,"修改成功",Toast.LENGTH_SHORT);
+                toast6.show();
+                // finish();
+                break;
+            case R.id.menu_color:
+                changeColor();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -525,21 +608,26 @@ public class NoteEditor extends Activity {
 
         // Sets up a map to contain values to be updated in the provider.
         ContentValues values = new ContentValues();
-        values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, System.currentTimeMillis());
+        //修改时间
+        Long now = Long.valueOf(System.currentTimeMillis());
+        Date date = new Date(now);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        String dateTime = format.format(date);
+        values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateTime);
 
         // If the action is to insert a new note, this creates an initial title for it.
         if (mState == STATE_INSERT) {
 
             // If no title was provided as an argument, create one from the note text.
             if (title == null) {
-  
+
                 // Get the note's length
                 int length = text.length();
 
                 // Sets the title by getting a substring of the text that is 31 characters long
                 // or the number of characters in the note plus one, whichever is smaller.
                 title = text.substring(0, Math.min(30, length));
-  
+
                 // If the resulting length is more than 30 characters, chops off any
                 // trailing spaces
                 if (length > 30) {
@@ -575,7 +663,7 @@ public class NoteEditor extends Activity {
                 values,  // The map of column names and new values to apply to them.
                 null,    // No selection criteria are used, so no where columns are necessary.
                 null     // No where columns are used, so no where arguments are necessary.
-            );
+        );
 
 
     }
@@ -613,4 +701,15 @@ public class NoteEditor extends Activity {
             mText.setText("");
         }
     }
+
+
+
+    //跳转改变颜色的activity，将uri信息传到新的activity
+    private final void changeColor() {
+        Intent intent = new Intent(null,mUri);
+        intent.setClass(NoteEditor.this,NoteColor.class);
+        NoteEditor.this.startActivity(intent);
+    }
+
+
 }
