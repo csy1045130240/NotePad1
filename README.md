@@ -286,7 +286,7 @@ switch (item.getItemId()) {
         }
 ```
 ##  修改背景颜色
-![](!%5B%5D%28https://github.com/csy1045130240/NotePad1/blob/master/images/2.jpg%29)
+![](https://github.com/csy1045130240/NotePad1/blob/master/images/2.jpg)
 
 ```
  /*
@@ -301,6 +301,7 @@ switch (item.getItemId()) {
         public static final int RED_COLOR = 4; //红
 ```
 数据库处理及初始化白色背景
+
 ```
 if (values.containsKey(NotePad.Notes.COLUMN_NAME_BACK_COLOR) == false) {
             values.put(NotePad.Notes.COLUMN_NAME_BACK_COLOR, NotePad.Notes.DEFAULT_COLOR);
@@ -460,7 +461,8 @@ public class NoteColor extends Activity {
     }
 ```
 ##  笔记导出
-
+![](https://github.com/csy1045130240/NotePad1/blob/master/images/5.jpg)
+![](https://github.com/csy1045130240/NotePad1/blob/master/images/6.jpg)
 ```
 <item android:id="@+id/menu_output"
         android:title="@string/menu_output" />
